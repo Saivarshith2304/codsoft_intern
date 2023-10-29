@@ -1,66 +1,48 @@
-from tkinter import *  
+contact = {}
 
-root = Tk()
-root.geometry("400x400")
-root.config(bg="cyan")
-root.resizable(0,0)
-root.title("contact book")
+def display():
+    print("name \t\t contact number")
+    for key in contact:
+        print("{}\t\t{}".format(key,contact.get(key)))
 
-contlist=[]
+while True:
+    print("\n.....................CONTACT BOOK....................\n1.ADD CONTACT \n2.SEARCH CONTACT \n3.DISPLAY CONTACT \n4.EDIT CONTACT \n5.DELETE \n6.EXIT")
+    print(".....................................................")
+    choice = int(input("ENTER YOUR CHOICE : "))
+    if choice == 1:
+        name = input("enter name of contact: ")
+        phno = int(input("enter phone number: "))
+        contact[name]=phno
 
-name = StringVar()
-number = StringVar()
+    elif choice == 2:
+        search =input("enter the contact number: ")
+        if search in contact:
+            print(search,"'s contact no is ",contact[search])
+        else:
+            print("name not found...!")
 
-frame = Frame(root)
-frame.pack(side=RIGHT)
+    elif choice == 3:
+        if not contact:
+            print("empty contact book")
+        else:
+            display()
+    elif choice == 4:
+        edit_cont=input("enter the contact to be edited: ")
+        if edit_cont in contact:
+            phno = int(input("enter mobile number: "))
+            contact[edit_cont]=phno
+            print("contact updated...")
+            display()
 
-scroll = Scrollbar(frame,orient=VERTICAL)
-select = Listbox(frame,yscrollcommand=scroll.set,height=12)
-scroll.config(command=select.yview)
-scroll.pack(side=RIGHT,fill=Y)
-select.pack(side=LEFT,fill=BOTH,expand=1)
+    elif choice==5:
+        delete=input("enter contact to be deleted: ")
+        if delete in contact:
+            confirm = input("do u want to delete this contact (y/n):")
+            if confirm=='y' or confirm=='Y':
+                contact.pop(delete)
+            display()
+        else:
+            print("name is not found...!")
 
-def selected():
-    return int(select.curselection()[0])
-
-def addcontact():
-    contlist.append([name.get(),number.get()])
-    select_set()
-
-def edit():
-    contlist[selected()] = [name.get(),number.get()]
-    select_set()
-
-def delete():
-    del contlist[selected()]
-    select_set()
-
-def view():
-    NAME,PHONE = contlist[selected()]
-    name.set(NAME)
-    number.set(PHONE)
-
-def exit():
-    root.destroy()
-
-def select_set():
-    contlist.sort()
-    selected.clear(0)
-    for name,phone in contlist:
-        select.insert(END,name)
-
-
-
-select_set()
-
-Label(root,text="NAME", font="arial 15 bold",bg="slategray3").place(x=30,y=20)
-Entry(root,textvariable=name).place(x=100,y=20)
-
-Label(root,text="PHONE NO:", font="arial 15 bold",bg="slategray3").place(x=30,y=70)
-Entry(root,textvariable=number).place(x=130,y=70)
-
-Button(root,text="ADD",font="arial 12 bold",bg="slategray4",command=addcontact).place(x=50,y=110)
-Button(root,text="EDIT",font="arial 12 bold",bg="slategray4",command=edit).place(x=50,y=310)
-Button(root,text="DELETE",font="arial 12 bold",bg="slategray4",command=delete).place(x=50,y=210)
-Button(root,text="VIEW",font="arial 12 bold",bg="slategray4",command=view).place(x=50,y=160)
-Button(root,text="EXIT",font="arial 12 bold",bg="slategray4",command=exit).place(x=300,y=320)
+    else:
+        break
